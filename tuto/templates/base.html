@@ -23,18 +23,32 @@ navigation"><span class="navbar-toggler-icon"></span></button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
+                <a class="nav-link active" aria-current="page" href={{ url_for('home') }}>Home</a>
+               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link disabled">Disabled</a>
               </li>
+              
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+            <form  class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"  />
               <button class="btn btn-outline-success" type="submit">Search</button>
+              <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li><a class = "username" >{{ current_user.username }}</a></li>
+                <li><a class = "deconnexion btn btn-danger" href="{{ url_for('logout') }}">
+                  <span class=" glyphicon glyphicon-log-out" title="Logout"
+                    >logout</span></a></li>
+                  {% else %}
+                  <li><a class = "deconnexion btn btn-primary" href="{{ url_for('login') }}">
+                    <span class=" glyphicon glyphicon-log-out" title="login"
+                      >login</span></a></li>
+                {% endif %}
+
+              </ul>
             </form>
           </div>
         </div>
@@ -50,7 +64,7 @@ navigation"><span class="navbar-toggler-icon"></span></button>
     </main>
     <footer class="footer mt-auto py-3 bg-light">
       <div class="container">
-        <span class="text-muted">DOUCET Noam/ COULON Titouant</span>
+        <span class="text-muted">DOUCET Noam/ COULON Titouan</span>
       </div>
     </footer>
     {% block scripts %}
@@ -59,3 +73,6 @@ navigation"><span class="navbar-toggler-icon"></span></button>
     {% endblock %}
   </body>
 </html>
+
+
+  

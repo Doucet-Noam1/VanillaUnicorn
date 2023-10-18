@@ -39,10 +39,10 @@ def loaddb(filename):
     
     
 @app.cli.command ()
-def syncdb ():
+def syncdb():
     '''Creates all missing tables.'''
     db.create_all ()
-      
+
 @app.cli.command()
 @click.argument("username")
 @click.argument("password")
