@@ -93,8 +93,7 @@ def logout():
 @app.route("/recherche/<titre>")
 def recherche_Titre(titre):
     liste = []
-    if request.method == "POST":
-        for b in Book.query.all():
-            if titre.lower() in b.title.lower() or titre.lower() in b.author.name.lower():
-                liste.append(b)
-        return render_template("recherche.html",recherche = liste)
+    for b in Book.query.all():
+        if titre.lower() in b.title.lower() or titre.lower() in b.author.name.lower():
+            liste.append(b)
+    return render_template("recherche.html",recherche = liste)
