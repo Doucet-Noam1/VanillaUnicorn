@@ -9,8 +9,10 @@ from .app import db
 from wtforms import PasswordField
 from .models import User
 from hashlib import sha256
-from flask_login import login_user , current_user
+from flask_login import login_user , current_user, logout_user
 from flask import request
+from flask_login import login_required
+
 
 @app.route("/")
 def home():
@@ -31,7 +33,9 @@ class AuthorForm ( FlaskForm ):
     id = HiddenField('id')
     name = StringField('Nom', validators =[DataRequired()])
 
+
 @app.route("/edit/author/<int:id>")
+@login_required
 def edit_author(id):
     a = get_author(id)
     f = AuthorForm(id=a.id, name=a.name)
@@ -50,7 +54,7 @@ def save_author ():
         return redirect (url_for('detail', id=a.id))
     a = get_author(int(f.id.data ))
     return render_template (
-    "edit - author.html",
+    "edit-author.html",
     author =a, form=f)
 
 class LoginForm(FlaskForm):
@@ -81,3 +85,48 @@ def login():
     return render_template(
         "login.html",form=f
     )
+
+@app.route("/logout/")
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
+
+@app.route("/recherche/<titre>")
+def recherche_Titre(titre):
+    liste = []
+    for b in Book.query.all():
+        if titre.lower() in b.title.lower() or titre.lower() in b.author.name.lower():
+            liste.append(b)
+    return render_template("recherche.html",recherche = liste)
+
+
+class AddAuthorForm (FlaskForm):
+    name = StringField('Nom',validators=[DataRequired()])
+    next=HiddenField()
+
+
+    def est_rempli(self):
+        author = Author.query.get(self.id.data)
+        if author is None:
+            return None
+        return author
+
+@app.route("/add/author/")
+@login_required
+def add_author():
+    f =AddAuthorForm()
+    a = Author()
+    a.name = f.name
+    return render_template(
+        "add_author.html",form=f
+    )
+
+@app.route("/saveadd/author/", methods =("POST" ,))
+def saveadd_author ():
+    a = Author()
+    f = AuthorForm ()
+    if f. validate_on_submit ():
+        a.name = f.name.data
+        db.session.add(a)
+        db.session.commit()
+        return redirect (url_for('home'))

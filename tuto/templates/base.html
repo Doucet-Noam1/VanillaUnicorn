@@ -23,19 +23,31 @@ navigation"><span class="navbar-toggler-icon"></span></button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
+                <a class="nav-link active" aria-current="page" href={{ url_for('home') }}>Home</a>
+               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href={{url_for('add_author')}}>Ajouter</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link disabled">Disabled</a>
-              </li>
+              
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button class="btn btn-outline-success" type="submit">Search</button>
+            <form  class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+              <input class="btn btn-success" type="submit" value="Search">
             </form>
+
+              <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li><a class = "nav-link active username" >{{ current_user.username }}</a></li>
+                <li><a class = "deconnexion btn btn-danger" href="{{ url_for('logout') }}">
+                  <span class=" glyphicon glyphicon-log-out" title="Logout"
+                    >logout</span></a></li>
+                  {% else %}
+                  <li><a class = "deconnexion btn btn-primary" href="{{ url_for('login') }}">
+                    <span class=" glyphicon glyphicon-log-out" title="login"
+                      >login</span></a></li>
+                {% endif %}
+
+              </ul>
           </div>
         </div>
       </nav>
@@ -59,3 +71,6 @@ navigation"><span class="navbar-toggler-icon"></span></button>
     {% endblock %}
   </body>
 </html>
+
+
+  
